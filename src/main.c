@@ -1,34 +1,41 @@
 #include <stdio.h>
-#include "Process.h"
+#include "MemoryManager.h"
 
 int main() {
 
-    Process p1;
+    MemoryManager manager;
 
-    initializeProcess(&p1, 1, 200);
+    initializeMemoryManager(&manager, 1000);
 
-    printf("Process ID       : %d\n", p1.processId);
-    printf("Memory Required  : %d KB\n", p1.memoryRequired);
-    printf("Allocated        : %s\n",
-           p1.allocated ? "Yes" : "No");
+    printf("===== MEMORY ALLOCATION SIMULATOR =====\n\n");
 
-    printf("\nAllocating memory...\n");
+    printf("Total Memory : %d KB\n", manager.totalMemory);
+    printf("Block Count  : %d\n\n", manager.blockCount);
 
-    allocateProcess(&p1, 500);
+    printf("Memory Blocks:\n");
 
-    printf("Start Address    : %d\n", p1.startAddress);
-    printf("End Address      : %d\n", p1.endAddress);
-    printf("Allocated        : %s\n",
-           p1.allocated ? "Yes" : "No");
+    for (int i = 0; i < manager.blockCount; i++) {
+        printf("Block %d\n", i);
+        printf("Start Address : %d\n", manager.blocks[i].startAddress);
+        printf("Size          : %d KB\n", manager.blocks[i].size);
+        printf("Process ID    : %d\n", manager.blocks[i].processId);
+        printf("Status        : %s\n\n",
+               manager.blocks[i].free ? "FREE" : "ALLOCATED");
+    }
+    int startAddress = allocateMemory(&manager, 1, 200);
 
-    printf("\nDeallocating memory...\n");
+printf("P1 allocated at address: %d\n\n", startAddress);
 
-    deallocateProcess(&p1);
 
-    printf("Start Address    : %d\n", p1.startAddress);
-    printf("End Address      : %d\n", p1.endAddress);
-    printf("Allocated        : %s\n",
-           p1.allocated ? "Yes" : "No");
+printf("Memory Blocks:\n");
 
+for (int i = 0; i < manager.blockCount; i++) {
+    printf("Block %d: Start=%d, Size=%d KB, PID=%d, Status=%s\n",
+           i,
+           manager.blocks[i].startAddress,
+           manager.blocks[i].size,
+           manager.blocks[i].processId,
+           manager.blocks[i].free ? "FREE" : "ALLOCATED");
+}
     return 0;
 }
