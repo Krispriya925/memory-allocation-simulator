@@ -18,4 +18,7 @@ typedef struct {
 
 void initializeMemoryManager(MemoryManager *manager, int totalMemory);
 int allocateMemory(MemoryManager *manager, int processId, int memoryRequired);
+int firstFit(MemoryManager *manager, int memoryRequired);
+void deallocateMemory(MemoryManager *manager, int processId);
+void mergeFreeBlocks(MemoryManager *manager);
 #endif
